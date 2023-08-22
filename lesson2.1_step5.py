@@ -25,4 +25,4 @@ with webdriver.Chrome() as browser:
 
     submit = browser.find_element(By.CSS_SELECTOR, '.btn.btn-default')
     submit.click()
-    time.sleep(3)
+    time.sleep(4)
