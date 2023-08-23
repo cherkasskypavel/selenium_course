@@ -1,12 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
-from my_funcs import str_to_func
 
-# def text_to_func(x, text=str()):
-#     from math import sin, log
-#     x = int(x)
-#     return eval(text.strip(',').replace('ln', 'log'))
 
 def text_to_func(*args, txt='', delimiter=''):
     from math import sin, log
