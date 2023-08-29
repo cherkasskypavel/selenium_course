@@ -6,6 +6,7 @@ import pytest
 def browser():
     print('\nОткрываем браузер')
     browser = webdriver.Chrome
+    browser.implicitly_wait(5)
     yield print('\nЗакрываем браузер')
     browser.close()
 
