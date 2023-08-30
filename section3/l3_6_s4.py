@@ -15,11 +15,19 @@ if os.path.exists(dotenv_path):
 
 # добавить переменные окружения
 link1 = 'https://stepik.org/lesson/236895/step/1'
-login = r''
-password = ''
+login = os.getenv('S_LOGIN')
+password = os.getenv('S_PASSWORD')
+link_list = ['https://stepik.org/lesson/236895/step/1',
+'https://stepik.org/lesson/236896/step/1',
+'https://stepik.org/lesson/236897/step/1',
+'https://stepik.org/lesson/236898/step/1',
+'https://stepik.org/lesson/236899/step/1',
+'https://stepik.org/lesson/236903/step/1',
+'https://stepik.org/lesson/236904/step/1',
+'https://stepik.org/lesson/236905/step/1']
+message = ''
 
 class TestStepik():
-    alien_message = ''
     def test_signin_check(self, browser):
         browser.get(link1)
         signin_button = WebDriverWait(browser, 10).until(
@@ -35,21 +43,22 @@ class TestStepik():
 
         submit = browser.find_element(By.CSS_SELECTOR, '.sign-form__btn.button_with-loader')
         submit.click()
-    @pytest.mark.parametrize('link_parts', list(range(895, 900)) + list(range(903, 906)))
+    @pytest.mark.parametrize('link_parts', link_list)
     def test_answer_spam(self, browser, link_parts):
-        link2 = f'https://stepik.org/lesson/236{link_parts}/step/1'
+        link2 = link_parts
+        answer = math.log(int((time.time())))
         browser.get(link2)
         answer_input = WebDriverWait(browser, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, 'textarea:required'))) # id 'ember93'
-        answer_input.clear()
-        answer = math.log(int((time.time())))
-        answer_input.send_keys(answer)
-        submit = browser.find_element(By.CSS_SELECTOR, '.submit-submission')
-        submit.click()
+            EC.element_to_be_clickable((By.CSS_SELECTOR, 'textarea:required')))
+        answer_input.send_keys(str(answer))
+        submit_button = WebDriverWait(browser, 5).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, '.submit-submission'))
+        )
+        submit_button.click()
 
-        feedback = browser.find_element(By.CSS_SELECTOR, 'p.smart-hints__hint')
+        feedback = WebDriverWait(browser, 5).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".smart-hints.ember-view.lesson__hint p")))
         feedback_text = feedback.text
-        if feedback_text != 'Correct!':
-            self.alien_message += feedback_text
-        # assert 'Correct!' in feedback_text
-    print(alien_message)
+        assert 'Correct!' in feedback_text
+if __name__ == '__main__':
+    pytest.main()

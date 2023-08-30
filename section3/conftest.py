@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 import pytest
 
 
-@pytest.fixture(scope="class")
+@pytest.fixture(scope="session")
 def browser():
     print('\nОткрываем браузер')
     browser = webdriver.Chrome()
